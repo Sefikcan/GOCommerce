@@ -1,6 +1,7 @@
 package entities
 
 import (
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"ordering/common/constants"
 )
 
@@ -23,4 +24,10 @@ func(order *Order) SetOrderTotal(){
 	for i:=0; i< len(order.OrderItem); i++ {
 		order.OrderTotal += order.OrderItem[i].Price * float64(order.OrderItem[i].Quantity)
 	}
+}
+
+func (order Order) ValidateBasket() error{
+	return validation.ValidateStruct(&order,
+		validation.Field(&order.UserId, validation.Required),
+		validation.Field(&order.OrderItem, validation.NotNil))
 }

@@ -44,6 +44,14 @@ func AddOrUpdateBasket(c *fiber.Ctx) error{
 
 	basket.SetBasketTotal()
 
+	err:= basket.ValidateBasket()
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": err,
+		})
+	}
+
 	p, err := json.Marshal(&basket)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)

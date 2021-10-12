@@ -2,9 +2,13 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"ordering/common/constants"
+	"ordering/common/messagebrokers/rabbitmq"
+	"ordering/common/messagebrokers/rabbitmq/models"
 	Connection "ordering/infrastructure"
 	"ordering/infrastructure/entities"
 	"strconv"
@@ -54,6 +58,33 @@ func CreateOrder(c *fiber.Ctx) error{
 	}
 
 	ordering.Id = resp.InsertedID.(primitive.ObjectID).String()
+
+	queueModel, err := json.Marshal(ordering)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+
+	var amqpModel = models.AmqpModel{
+		RabbitMQUrl:  constants.RABBITMQURL,
+		QueueName: constants.CREATEORDERQUEUENAME,
+		ExchangeName: "",
+		Durable:      false,
+		AutoDelete:   false,
+		Exclusive:    false,
+		NoWait:       false,
+		Mandatory:    false,
+		Immediate:    false,
+		ContentType:  "application/json",
+		Body:         queueModel,
+	}
+
+	if err := rabbitmq.PrepareRabbitMQ(amqpModel); err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
 	c.Status(fiber.StatusCreated)
 	return c.JSON(fiber.Map{
 		"data": &ordering,

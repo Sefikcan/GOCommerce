@@ -47,6 +47,14 @@ func CreateProduct(c *fiber.Ctx) error{
 		})
 	}
 
+	err:= product.ValidateProduct()
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": err,
+		})
+	}
+
 	if result := Connection.DB.Create(&product); result.Error != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return c.JSON(fiber.Map{
@@ -88,6 +96,14 @@ func UpdateProduct(c *fiber.Ctx) error{
 
 	if err := c.BodyParser(&updateProduct); err != nil {
 		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"message": err,
+		})
+	}
+
+	err:= product.ValidateProduct()
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": err,
 		})
