@@ -2,10 +2,12 @@ package Connection
 
 import (
 	"basket/common/constants"
+	"basket/common/logging"
 	"github.com/go-redis/redis"
 )
 
 var RedisClient *redis.Client
+var Log = logging.HandleLogging()
 
 func Connect(){
 	client := redis.NewClient(&redis.Options{
@@ -16,7 +18,7 @@ func Connect(){
 
 	_, err := client.Ping().Result()
 	if err != nil {
-		panic("Could not connect to the database")
+		Log.Panic("Could not connect to the database")
 	}
 
 	RedisClient = client

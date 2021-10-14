@@ -1,3 +1,5 @@
 
 composes/rabbitmq/data/coordination/rabbit@my-rabbit/00000002.wal
 composes/rabbitmq/data/quorum/rabbit@my-rabbit/00000002.wal
+composes/rabbitmq/data/quorum/rabbit@my-rabbit/00000003.wal
+composes/rabbitmq/data/coordination/rabbit@my-rabbit/00000003.wal
