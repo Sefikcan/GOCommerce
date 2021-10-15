@@ -1,5 +1,36 @@
 version: '3.3'
 services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+  basketapi:
+    build:
+      context: ../services/Basket/
+      dockerfile: Dockerfile
+    container_name: basketapi
+    restart: always
+    ports:
+      - '8002:8002'
+
+  prometheus:
+    image: prom/prometheus:v2.24.0
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9090:9090"
+    restart: always
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.1
     container_name: elasticsearch
@@ -67,3 +98,5 @@ volumes:
   catalog-db:
   mongo_data:
   elasticsearch-data:
+  prometheus_data:
+  grafana-storage:
