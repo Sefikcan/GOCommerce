@@ -14,6 +14,9 @@ import (
 
 var Log = logging.HandleLogging()
 
+// swagger:route GET /api/v1/baskets/{userId} Basket GetBasketByUserId
+// responses:
+//  200: Basket
 func GetBasketByUserId(c *fiber.Ctx) error {
 	basket := new(entities.Basket)
 	result, err := Connection.RedisClient.Get(c.Params("userId")).Result()
@@ -39,6 +42,9 @@ func GetBasketByUserId(c *fiber.Ctx) error {
 	})
 }
 
+// swagger:route POST /api/v1/baskets/ Basket AddOrUpdateBasket
+// responses:
+//  201: Basket
 func AddOrUpdateBasket(c *fiber.Ctx) error{
 	basket := new(entities.Basket)
 
@@ -96,6 +102,9 @@ func AddOrUpdateBasket(c *fiber.Ctx) error{
 	})
 }
 
+// swagger:route DELETE /api/v1/baskets/{userId} Basket RemoveBasketByUserId
+// responses:
+//  204: null
 func RemoveBasketByUserId(c *fiber.Ctx) error{
 	basket := new(entities.Basket)
 

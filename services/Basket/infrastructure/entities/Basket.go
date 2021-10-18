@@ -4,11 +4,13 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4"
 )
 
+// swagger:model Basket
 type Basket struct {
 	UserId        int     `json:"userId" form:"userId"`
 	BasketItem    []BasketItem `json:"basketItem" form:"basketItem"`
 }
 
+// swagger:model BasketItem
 type BasketItem struct {
 	ProductId     int 	  `json:"productId" form:"productId"`
 	Price         float64 `json:"price" form:"price"`

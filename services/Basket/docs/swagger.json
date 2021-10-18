@@ -1,0 +1,171 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "basket",
+      "description": "User Basket Operation"
+    }
+  ],
+  "host": "localhost:8002",
+  "basePath": "/api/v1",
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation for BasketApi",
+    "title": "BasketApi",
+    "version": "1.0.0"
+  },
+  "definitions": {
+    "Basket": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "basketItem": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "productId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "price": {
+                "type": "number",
+                "format": "number"
+              },
+              "quantity": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "Basket"
+      }
+    }
+  },
+  "paths": {
+    "/baskets/": {
+      "post": {
+        "tags": [
+          "basket"
+        ],
+        "summary": "Add or update basket",
+        "description": "",
+        "operationId": "AddOrUpdateBasket",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User Add or Update Basket Operation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Basket"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Validation exception"
+          },
+          "201": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Invalid Model Property"
+          }
+        }
+      }
+    },
+    "/baskets/{userId}": {
+      "delete": {
+        "tags": [
+          "basket"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "summary": "Delete basket by userId",
+        "description": "",
+        "operationId": "RemoveBasketByUserId",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found exception"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "basket"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "summary": "Getting basket info by user id",
+        "description": "",
+        "operationId": "GetBasketByUserId",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found exception"
+          },
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}
