@@ -5,15 +5,15 @@ import (
 )
 
 type Basket struct {
-	UserId        int     `json:"userId"`
-	BasketItem    []BasketItem `json:"basketItem"`
+	UserId        int     `json:"userId" form:"userId"`
+	BasketItem    []BasketItem `json:"basketItem" form:"basketItem"`
 }
 
 type BasketItem struct {
-	ProductId     int 	  `json:"productId"`
-	Price         float64 `json:"price"`
-	Quantity      int     `json:"quantity"`
-	BasketTotal   float64 `json:"basketTotal"`
+	ProductId     int 	  `json:"productId" form:"productId"`
+	Price         float64 `json:"price" form:"price"`
+	Quantity      int     `json:"quantity" form:"quantity"`
+	BasketTotal   float64 `json:"basketTotal" form:"basketTotal"`
 }
 
 func(basket *Basket) SetBasketTotal(){
@@ -24,10 +24,12 @@ func(basket *Basket) SetBasketTotal(){
 
 func (basket Basket) ValidateBasket() error{
 	for i:=0; i< len(basket.BasketItem); i++ {
-		return validation.ValidateStruct(&basket.BasketItem[i],
+		if err := validation.ValidateStruct(&basket.BasketItem[i],
 			validation.Field(&basket.BasketItem[i].ProductId, validation.Min(1)),
 			validation.Field(&basket.BasketItem[i].Price, validation.Min(float64(1))),
-			validation.Field(&basket.BasketItem[i].Quantity, validation.Min(12)))
+			validation.Field(&basket.BasketItem[i].Quantity, validation.Min(12))); err != nil{
+			return err
+		}
 	}
 
 	return validation.ValidateStruct(&basket,

@@ -34,7 +34,6 @@ func GetBasketByUserId(c *fiber.Ctx) error {
 			"message": err,
 		})
 	}
-
 	return c.JSON(fiber.Map{
 		"data": &basket,
 	})
